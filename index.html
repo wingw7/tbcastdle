@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TBCastdle</title>
+    <meta charset="UTF-8">
+
+    <!--font-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <!--icons-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+</head>
+
+<style>
+    body {
+        background-color: #1F2B37;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 100;
+        color: white;
+        padding-top: 10px;
+        padding-right: 50px;
+    }
+    
+    .content {
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-bottom: 50px;
+    }
+    
+    em {
+        color: #DDDDDD;
+    }
+    
+    .bi {
+        font-size: 32px;
+    }
+    
+    h1,
+    h2,
+    h3,
+    h4 {
+        text-align: center;
+    }
+    
+    h1 {
+        font-weight: 700;
+        color: #ffebc7;
+    }
+    
+    table {
+        white-space: nowrap;
+    }
+    
+    td {
+        padding-right: 22px;
+    }
+    
+    .charname {
+        font-weight: 700;
+    }
+    
+    button {
+        padding: 10px;
+    }
+    
+    #disclaimer {
+        padding-top: 50px;
+        text-align: center;
+    }
+    
+    #results {
+        white-space: nowrap;
+    }
+    
+    #unselected {
+        max-width: 1200px;
+        margin: auto;
+        text-align: center;
+    }
+    /* shamelessly copied from w3schools */
+    
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        background-color: rgb(0 0 0 / 90%);
+    }
+    /* Modal Content/Box */
+    
+    .modal-content {
+        background-color: #4F565F;
+        margin: 15% auto;
+        /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 900px;
+        /* Could be more or less, depending on screen size */
+    }
+    /* The Close Button */
+    
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    /*
+    #help {
+        background-color: #4F565F;
+        padding: 4px;
+        max-width: 1200px;
+        margin: auto;
+    }
+*/
+    
+    #help {
+        margin-left: 100%;
+        padding-right: 20px;
+    }
+    
+    #help:hover {
+        cursor: pointer;
+    }
+
+</style>
+
+<body>
+    <!--    <h4 id='help'>click for help</h3>-->
+    <i class="bi bi-question-circle-fill" id="help"></i>
+    <div class="content">
+        <h1>TBCastdle</h1>
+        <h3 id="date"></h3>
+
+
+        <!--    <button id="run">Load!</button>-->
+        <div id='loading' align='center'>loading...</div>
+        <div id='unselected'>
+        </div>
+
+        <br>
+
+        <table id="selects">
+        </table>
+
+        <br>
+
+        <button id="submit" disabled="true">Guess</button>
+
+        <br>
+        <br>
+
+        <div id='results'></div>
+
+        <div id='disclaimer'>This page was made for fun - the show and its characters belong to Punchdrunk.</div>
+    </div>
+
+    <div id="helpmodal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Welcome to a version of Wordle for The Burnt City cast list!</p>
+            <p>The aim is to guess the daily cast list (it may take up to 15 minutes to catch up to the newest version). The page will alphabetically list all the performers definitely in today's cast at the top, and all characters definitely in today's show down the side. <em>(maybe I'll make a hard mode later that throws in some wildcards...)</em></p>
+            <p>For each character, select the performer who you think is playing them today. Once a performer has been selected, they will disappear from the list at the top. Any repeats will be highlighted in red.</p>
+            <p>Once you have made a guess for every character, with no repeats, you'll be able to hit <b>Guess</b>!</p>
+            <p>Correct guesses will be locked in <b>green</b>, incorrect guesses will be in <b>orange</b>. All your guesses will be recorded in columns to the right so you can keep track of what you've tried. There's no limit to how many times you can guess.</p>
+            <p>Good luck!</p>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/table-to-json@1.0.0/lib/jquery.tabletojson.min.js" integrity="sha256-H8xrCe0tZFi/C2CgxkmiGksqVaxhW0PFcUKZJZo1yNU=" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
