@@ -6,6 +6,7 @@ var CharacterNames = [];
 var TodayPerformerNames = [];
 var PerformerNames = [];
 var UnselectedPerformerNames = [];
+var DuplicateCharacters = [];
 
 var bTesting = false; // change this to true to fetch the smaller dummy cast for easier testing
 
@@ -44,6 +45,7 @@ function ResetGlobalVars() {
     UnselectedPerformerNames = [];
     NumGuesses = 0;
     GuessColors = [];
+    DuplicateCharacters = [];
 }
 
 function GetAlternateCast() {
@@ -82,6 +84,7 @@ function Initiate() {
     CastJsonList.forEach(function (row) {
         var charName = row['character'];
         if (CharacterNames.indexOf(charName) > -1) {
+            DuplicateCharacters.push(charName);
             charName += ' 2';
             row['character'] = charName;
         }
@@ -205,9 +208,23 @@ function CheckSelections() {
             selectElement.attr('disabled', 'true');
             colors.push('green');
         } else if (TodayPerformerNames.indexOf(selectedName) > -1) { // wrong place
-            selectElement.css('color', 'orange');
-            bAllCorrect = false;
-            colors.push('orange');
+            var bDuplicateCorrect = false;
+
+            // was it a NYX/Peep ordering issue?
+            if (DuplicateCharacters.indexOf(row.character.replaceAll(' 2', '')) > -1) {
+                if (LookupCharacterInCast(GetDuplicateCharacterAlternate(row.character)) === selectedName) {
+                    selectElement.css('color', 'green');
+                    selectElement.attr('disabled', 'true');
+                    colors.push('green');
+                    bDuplicateCorrect = true;
+                }
+            }
+
+            if (!bDuplicateCorrect) {
+                selectElement.css('color', 'orange');
+                bAllCorrect = false;
+                colors.push('orange');
+            }
         } else {
             selectElement.css('color', 'gray');
             bAllCorrect = false;
@@ -218,6 +235,22 @@ function CheckSelections() {
     GuessColors.push(colors);
 
     return bAllCorrect;
+}
+
+function GetDuplicateCharacterAlternate(character) {
+    if (character.indexOf("2") > -1) {
+        return character.replaceAll(' 2', '');
+    } else {
+        return character + " 2";
+    }
+}
+
+function LookupCharacterInCast(character) {
+    for (i = 0; i < CastJsonList.length; i++) {
+        if (CastJsonList[i].character == character) {
+            return CastJsonList[i].performer;
+        }
+    }
 }
 
 
