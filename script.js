@@ -65,6 +65,8 @@ function GetAlternateCast() {
             row.character = row.character.replaceAll('*', '');
         });
 
+        CastJsonList[0]['date'] = CastJsonList[1]['date']; // Evening date ends up in second row - I think?
+
         Initiate();
         $("#loading").html("");
     });
