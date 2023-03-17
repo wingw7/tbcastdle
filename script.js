@@ -10,7 +10,9 @@ var UnselectedPerformerNames = [];
 var bTesting = false; // change this to true to fetch the smaller dummy cast for easier testing
 
 var CastApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/cast";
+var Cast2ApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/cast2";
 var TestApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/test";
+var Test2ApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/test2";
 
 var NumGuesses = 0;
 var GuessColors = [];
@@ -33,11 +35,48 @@ $(document).ready(function () {
     });
 });
 
+
+function ResetGlobalVars() {
+    CastJsonList = [];
+    CharacterNames = [];
+    TodayPerformerNames = [];
+    PerformerNames = [];
+    UnselectedPerformerNames = [];
+    NumGuesses = 0;
+    GuessColors = [];
+}
+
+function GetAlternateCast() {
+    $.getJSON(bTesting ? Test2ApiUrl : Cast2ApiUrl, function (data) {
+        if (data[bTesting ? 'test2' : 'cast2'][0]['character'].indexOf("N/A") > -1) {
+            // not a valid alternate cast
+            window.alert("There is no second cast to show!");
+            return;
+        }
+
+        ResetGlobalVars();
+        $('#submit').prop('disabled', true);
+        $('#results').html('');
+
+        CastJsonList = data[bTesting ? 'test2' : 'cast2'];
+        CastJsonList.forEach(function (row) {
+            row.character = row.character.replaceAll('*', '');
+        });
+
+        Initiate();
+        $("#loading").html("");
+    });
+}
+
 function Initiate() {
 
     // get the date, being looked after by aegisthus 
     var date = CastJsonList[0]['date'];
     $("#date").html(date);
+
+    if (date.indexOf("Matinee") > -1) {
+        $('#swap').css('display', 'inline');
+    }
 
     // collect names of all characters and performers in today's cast list
     CastJsonList.forEach(function (row) {
@@ -222,3 +261,9 @@ window.onclick = function (event) {
         $("#helpmodal").css("display", "none");
     }
 }
+
+// swap cast
+$('#swap').click(function () {
+    GetAlternateCast();
+    $('#swap').css('display', 'none');
+})
