@@ -146,7 +146,11 @@ $('#submit').click(function () {
         OnDropDownChange();
         PopulateSelects(UnselectedPerformerNames);
     } else {
-        $('#results').html("You got it in " + NumGuesses + " guesses!<br>" + MakeHearts());
+        if (NumGuesses === 1) {
+            $('#results').html("You got it in 1 guess! &#x1f3c6;<br>" + MakeHearts());
+        } else {
+            $('#results').html("You got it in " + NumGuesses + " guesses!<br>" + MakeHearts());
+        }
         $('#submit').attr("disabled", true);
     }
 });
