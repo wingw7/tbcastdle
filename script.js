@@ -54,7 +54,7 @@ function GetAlternateCast() {
     $.getJSON(bTesting ? Test2ApiUrl : Cast2ApiUrl, function (data) {
         if (data[bTesting ? 'test2' : 'cast2'][0]['character'].indexOf("N/A") > -1) {
             // not a valid alternate cast
-            window.alert("There is no second cast to show!");
+            window.alert("There is no second cast to show yet!");
             return;
         }
 
@@ -64,7 +64,9 @@ function GetAlternateCast() {
 
         CastJsonList = data[bTesting ? 'test2' : 'cast2'];
         CastJsonList.forEach(function (row) {
-            row.character = row.character.replaceAll('*', '');
+            if (row.character) {
+                row.character = row.character.replaceAll('*', '');
+            }
         });
 
         CastJsonList[0]['date'] = CastJsonList[1]['date']; // Evening date ends up in second row - I think?
@@ -80,7 +82,7 @@ function Initiate() {
     var date = CastJsonList[0]['date'];
     $("#date").html(date);
 
-    if (date.indexOf("Matinee") > -1) {
+    if (date.toLowerCase().indexOf("matinee") > -1) {
         $('#swap').css('display', 'inline');
     }
 
@@ -207,34 +209,36 @@ function CheckSelections() {
     var bAllCorrect = true;
     var colors = [];
     CastJsonList.forEach(function (row) {
-        var selectElement = $('#' + row.character.replaceAll(' ', ''));
-        var selectedName = selectElement[0].value;
-        if (selectedName === row.performer) { // correct!
-            selectElement.css('color', 'green');
-            selectElement.attr('disabled', 'true');
-            colors.push('green');
-        } else if (TodayPerformerNames.indexOf(selectedName) > -1) { // wrong place
-            var bDuplicateCorrect = false;
+        if (row.character) {
+            var selectElement = $('#' + row.character.replaceAll(' ', ''));
+            var selectedName = selectElement[0].value;
+            if (selectedName === row.performer) { // correct!
+                selectElement.css('color', 'green');
+                selectElement.attr('disabled', 'true');
+                colors.push('green');
+            } else if (TodayPerformerNames.indexOf(selectedName) > -1) { // wrong place
+                var bDuplicateCorrect = false;
 
-            // was it a NYX/Peep ordering issue?
-            if (DuplicateCharacters.indexOf(row.character.replaceAll(' 2', '')) > -1) {
-                if (LookupCharacterInCast(GetDuplicateCharacterAlternate(row.character)) === selectedName) {
-                    selectElement.css('color', 'green');
-                    selectElement.attr('disabled', 'true');
-                    colors.push('green');
-                    bDuplicateCorrect = true;
+                // was it a NYX/Peep ordering issue?
+                if (DuplicateCharacters.indexOf(row.character.replaceAll(' 2', '')) > -1) {
+                    if (LookupCharacterInCast(GetDuplicateCharacterAlternate(row.character)) === selectedName) {
+                        selectElement.css('color', 'green');
+                        selectElement.attr('disabled', 'true');
+                        colors.push('green');
+                        bDuplicateCorrect = true;
+                    }
                 }
-            }
 
-            if (!bDuplicateCorrect) {
-                selectElement.css('color', 'orange');
+                if (!bDuplicateCorrect) {
+                    selectElement.css('color', 'orange');
+                    bAllCorrect = false;
+                    colors.push('orange');
+                }
+            } else {
+                selectElement.css('color', 'gray');
                 bAllCorrect = false;
-                colors.push('orange');
+                colors.push('gray');
             }
-        } else {
-            selectElement.css('color', 'gray');
-            bAllCorrect = false;
-            colors.push('gray');
         }
     });
 
