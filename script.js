@@ -28,7 +28,9 @@ $(document).ready(function () {
     $.getJSON(bTesting ? TestApiUrl : CastApiUrl, function (data) {
         CastJsonList = data[bTesting ? 'test' : 'cast'];
         CastJsonList.forEach(function (row) {
-            row.character = row.character.replaceAll('*', '');
+            if (row.character) {
+                row.character = row.character.replaceAll('*', '');
+            }
         });
 
         Initiate();
@@ -84,14 +86,16 @@ function Initiate() {
 
     // collect names of all characters and performers in today's cast list
     CastJsonList.forEach(function (row) {
-        var charName = row['character'];
-        if (CharacterNames.indexOf(charName) > -1) {
-            DuplicateCharacters.push(charName);
-            charName += ' 2';
-            row['character'] = charName;
+        if (row.character) {
+            var charName = row['character'];
+            if (CharacterNames.indexOf(charName) > -1) {
+                DuplicateCharacters.push(charName);
+                charName += ' 2';
+                row['character'] = charName;
+            }
+            CharacterNames.push(charName);
+            TodayPerformerNames.push(row['performer']);
         }
-        CharacterNames.push(charName);
-        TodayPerformerNames.push(row['performer']);
     });
 
     // temp - add wildcards here if we want them
