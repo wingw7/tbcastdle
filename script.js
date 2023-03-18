@@ -69,7 +69,8 @@ function GetAlternateCast() {
             }
         });
 
-        CastJsonList[0]['date'] = CastJsonList[1]['date']; // Evening date ends up in second row - I think?
+        CastJsonList[0]['date'] = CastJsonList[0]['date'].replaceAll('matinee', '').replaceAll('Matinee', '');
+        CastJsonList[0]['date'] += "Evening";
 
         Initiate();
         $("#loading").html("");
