@@ -10,10 +10,16 @@ var DuplicateCharacters = [];
 
 var bTesting = false; // change this to true to fetch the smaller dummy cast for easier testing
 
-var CastApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/cast";
-var Cast2ApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/cast2";
-var TestApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/test";
-var Test2ApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/test2";
+//var CastApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/cast";
+//var Cast2ApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/cast2";
+//var TestApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/test";
+//var Test2ApiUrl = "https://api.sheety.co/acf668d6acaab4b70f6945ec76cce551/tbcastdle/test2";
+
+var CastApiUrl = "https://script.google.com/macros/s/AKfycbyMg1vMtOAzqDS5_6qiWzydCFX300s4MX8OTwGY1tANWIQFmKg3iaxswvt-6fwgiyoeWA/exec?path=cast";
+var Cast2ApiUrl = "https://script.google.com/macros/s/AKfycbyMg1vMtOAzqDS5_6qiWzydCFX300s4MX8OTwGY1tANWIQFmKg3iaxswvt-6fwgiyoeWA/exec?path=cast2";
+var TestApiUrl = "https://script.google.com/macros/s/AKfycbyMg1vMtOAzqDS5_6qiWzydCFX300s4MX8OTwGY1tANWIQFmKg3iaxswvt-6fwgiyoeWA/exec?path=test";
+var Test2ApiUrl = "https://script.google.com/macros/s/AKfycbyMg1vMtOAzqDS5_6qiWzydCFX300s4MX8OTwGY1tANWIQFmKg3iaxswvt-6fwgiyoeWA/exec?path=test2";
+
 
 var NumGuesses = 0;
 var GuessColors = [];
@@ -26,7 +32,8 @@ var HeartMap = {
 
 $(document).ready(function () {
     $.getJSON(bTesting ? TestApiUrl : CastApiUrl, function (data) {
-        CastJsonList = data[bTesting ? 'test' : 'cast'];
+        //CastJsonList = data[bTesting ? 'test' : 'cast']; // sheety
+        CastJsonList = data;
         CastJsonList.forEach(function (row) {
             if (row.character) {
                 row.character = row.character.replaceAll('*', '');
@@ -52,7 +59,8 @@ function ResetGlobalVars() {
 
 function GetAlternateCast() {
     $.getJSON(bTesting ? Test2ApiUrl : Cast2ApiUrl, function (data) {
-        if (data[bTesting ? 'test2' : 'cast2'][0]['character'].indexOf("N/A") > -1) {
+        // if (data[bTesting ? 'test2' : 'cast2'][0]['character'].indexOf("N/A") > -1) { // sheety
+        if (data[0]['character'].indexOf("N/A") > -1) {
             // not a valid alternate cast
             window.alert("There is no second cast to show yet!");
             return;
@@ -62,7 +70,8 @@ function GetAlternateCast() {
         $('#submit').prop('disabled', true);
         $('#results').html('');
 
-        CastJsonList = data[bTesting ? 'test2' : 'cast2'];
+        // CastJsonList = data[bTesting ? 'test2' : 'cast2']; // sheety
+        CastJsonList = data;
         CastJsonList.forEach(function (row) {
             if (row.character) {
                 row.character = row.character.replaceAll('*', '');
