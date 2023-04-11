@@ -20,6 +20,8 @@ var Cast2ApiUrl = "https://script.google.com/macros/s/AKfycbyMg1vMtOAzqDS5_6qiWz
 var TestApiUrl = "https://script.google.com/macros/s/AKfycbyMg1vMtOAzqDS5_6qiWzydCFX300s4MX8OTwGY1tANWIQFmKg3iaxswvt-6fwgiyoeWA/exec?path=test";
 var Test2ApiUrl = "https://script.google.com/macros/s/AKfycbyMg1vMtOAzqDS5_6qiWzydCFX300s4MX8OTwGY1tANWIQFmKg3iaxswvt-6fwgiyoeWA/exec?path=test2";
 
+var SubmitUrl = "https://script.google.com/macros/s/AKfycbyMg1vMtOAzqDS5_6qiWzydCFX300s4MX8OTwGY1tANWIQFmKg3iaxswvt-6fwgiyoeWA/exec";
+
 
 var NumGuesses = 0;
 var GuessColors = [];
@@ -212,6 +214,8 @@ $('#submit').click(function () {
             $('#results').html("You got it in " + NumGuesses + " guesses!<br>" + MakeHearts());
         }
         $('#submit').attr("disabled", true);
+
+        $.get(SubmitUrl, function (data, status) {});
     }
 });
 
